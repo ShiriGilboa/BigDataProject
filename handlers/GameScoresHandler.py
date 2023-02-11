@@ -29,10 +29,10 @@ class TeamsGameScores(BaseHandler):
         PTS INT,
         PRIMARY KEY (GameID, TeamID));'''.format(self.name)
         self.create_table(table_spec)
-        self.insert_elements(self.data)
-
+        self.insert_elements()
+        self.update_data()
 class PlayersGameScores(BaseHandler):
-    def __init__(self, name, db, data):
+    def __init__(self, name, db, data, cache=None):
         super().__init__(name, db, data)
         table_spec = '''CREATE TABLE {} (
         GameID varchar(100) NOT NULL,
@@ -57,4 +57,5 @@ class PlayersGameScores(BaseHandler):
         PTS INT ,
         PRIMARY KEY (GameID, PlayerID));'''.format(self.name)
         self.create_table(table_spec)
-        self.insert_elements(self.data)
+        self.insert_elements()
+        self.update_data()

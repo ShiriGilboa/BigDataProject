@@ -28,13 +28,45 @@ def get_values_from_element(element):
 
 
 class BaseHandler:
-    def __init__(self, name, db, data):
+    def __init__(self, name, db, data, cache=None):
         self.name = name
         self.db = db
         self.data = data
         self.conflicts = ""
+        self.new_data = []
+        self.need_update = []
+        if cache:
+            self.split_data(cache)
+
+    def split_data(self, cache):
+        '''
+        Here, using our cache (if exists) we are going to split the data into 2 groups. the need to be updated data and
+        new data.
+        This method going to set 2 members : new_data, need_update_data
+        '''
+        #Cheching that cache exists, and that desired data and we relevant cache there.
+        if cache and hasattr(cache, self.name.lower()) and cache.__getattribute__(self.name.lower()) is not None:
+            for element in self.data:
+                #exists completely no need to update it
+                if element in cache.__getattribute__(self.name.lower()):
+                    continue
+                # this data is not exists / changed
+                elif self.key_attr:
+                    checked_keys = False
+                    for cache_elem in cache.__getattribute__(self.name.lower()):
+                        # checking if this item is exists in cache according to keys(assuming keys wont change)
+                        checked_keys = all([element.__getattribute__(key)==cache_elem.__getattribute__(key) for key in self.key_attr])
+                        if checked_keys:
+                            self.need_update.append(element)
+                else:
+                    # need to insert this column
+                    self.new_data.append(element)
+        else:
+            self.new_data = self.data
+
 
     def create_table(self, table_spec):
+        print("Trying to create table with name {}".format(self.name))
         try:
             self.db.execute("{}".format(table_spec))
             print("Table created successfully or already exists")
@@ -59,16 +91,16 @@ class BaseHandler:
         print("Created Conflicts handler {}".format(self.conflicts))
         self.conflicts = set_vals
 
-    def insert_elements(self, elements):
+    def insert_elements(self):
         '''
         This Method will insert all data rows one by one, and update relevant features if needed
         :param elements: Elements object implemented as list of objects with desire data type
         :return: None
         '''
-        if len(elements) > 0:
+        if len(self.new_data) > 0:
             # Extract the name of the properties for the column name.
-            columns = get_columns_from_prop(elements[0])
-            for element in elements:
+            columns = get_columns_from_prop(self.new_data[0])
+            for element in self.new_data:
                 try:
                     # Execute and commit the command
                     insert_line = f'''
@@ -81,3 +113,6 @@ class BaseHandler:
                     print(f'Error: {e}')
                 finally:
                     self.db.commit()
+
+    def update_data(self):
+        print("Going to update the following data {}".format(self.need_update))

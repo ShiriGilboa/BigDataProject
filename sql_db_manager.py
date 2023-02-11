@@ -12,3 +12,5 @@ def get_sql_con(db_from_scratch=False, db_name=DB_FILE_NAME):
         db = sql.connect(db_name)
         print("New DB with name {} Created!".format(db_name))
         return db
+    else:
+        return sql.connect(db_name)

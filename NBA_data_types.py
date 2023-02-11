@@ -22,6 +22,11 @@ class GameScore:
         self.BLK = BLK
         self.TournOvers = TournOvers
         self.PTS = PTS
+    def __eq__(self, other): 
+        if not isinstance(other, GameScore):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.GameID == other.GameID
 
     def __str__(self):
         return f'GameID: {self.GameID}, FGA: {self.FGA}, FGM: {self.FGM}, FGPER: {self.FGPER}, ThreePM: {self.ThreePM}, ThreePA: {self.ThreePA}, ThreePPER: {self.ThreePPER}, FTM: {self.FTM}, FTA: {self.FTA}, FTPER: {self.FTPER}, OREB: {self.OREB}, DREB: {self.DREB}, AST: {self.AST}, STL: {self.STL}, BLK: {self.BLK}, TournOvers: {self.TournOvers}, PTS: {self.PTS}'
@@ -65,6 +70,11 @@ class Game:
         self.HomeTeamID = HomeTeamID
         self.VisitorTeamID = VisitorTeamID
         self.LiveStatus = LiveStatus
+    def __eq__(self, other):
+        if not isinstance(other, Game):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.ID == other.ID and self.LiveStatus == other.LiveStatus
 
     def __str__(self):
         return f'{self.ID} {self.Date} {self.HomeTeamID} {self.VisitorTeamID} {self.LiveStatus}'
@@ -76,6 +86,12 @@ class GameLineUp:
         self.GameID = GameID
         self.TeamID = TeamID
         self.PlayerID = PlayerID
+
+    def __eq__(self, other):
+        if not isinstance(other, GameLineUp):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.GameID == other.GameID and self.TeamID == other.TeamID and self.PlayerID == other.PlayerID
 
     def __str__(self):
         return f'{self.GameID} {self.TeamID} {self.PlayerID}'
@@ -93,6 +109,11 @@ class Player:
         self.Weight = Weight
         self.YearsInLeague = YearsInLeague
         self.Country = Country
+    def __eq__(self, other):
+        if not isinstance(other, Player):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.ID == other.ID and self.Country == other.Country and self.YearsInLeague == other.YearsInLeague
 
     def __str__(self):
         return f"ID: {self.ID}, Name: {self.FirstName} {self.LastName}, DOB: {self.DateOfBirth}, Position: {self.Position}, Height: {self.Height}, Weight: {self.Weight}, Years in League: {self.YearsInLeague}, Country: {self.Country}"
@@ -105,6 +126,11 @@ class Team:
         self.TeamName = name
         self.TeamCode = code
         self.City = city
+    def __eq__(self, other):
+        if not isinstance(other, Team):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.ID == other.ID and self.TeamName == other.TeamName and self.City == other.City
 
     def __str__(self):
         return f'{self.ID} {self.TeamName} {self.TeamCode} {self.City}'
@@ -116,6 +142,11 @@ class TeamRoster:
     def __init__(self, TeamID, PlayerID):
         self.TeamID = TeamID
         self.PlayerID = PlayerID
+    def __eq__(self, other):
+        if not isinstance(other, TeamRoster):
+            # don't attempt to compare against unrelated types
+            return NotImplemented
+        return self.TeamID == other.TeamID and self.PlayerID == other.PlayerID
 
     def __str__(self):
         return f'{self.TeamID} {self.PlayerID}'

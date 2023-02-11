@@ -9,7 +9,6 @@ class TeamRosters(Parser):
 
 
     def parse(self, raw_data):
-
         # Access the 'pl' list within the json
         players_data = raw_data['data']['pls']['pl']
 

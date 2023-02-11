@@ -1,6 +1,6 @@
-import sqlite3
-
-from NBA_DB_manager import get_final_games_ids
+from handlers.TeamsRostersHandler import TeamRostersHandler
+from parsers.TeamRosters import TeamRosters
+from NBA_DB_manager import NBAFeedFromDB
 from handlers import Games, Teams, Players
 import handlers.Teams
 import parsers.Games
@@ -28,7 +28,7 @@ data_types = {
 }
 
 
-def ingest_naive_data(db_connection):
+def ingest_naive_data(db_connection, cache=None):
     '''
     This method will handle the ETL pipline for the naive data types (Games, Players, Teams) means, data type that
     doesn't require pre-processing manipulation
@@ -38,12 +38,21 @@ def ingest_naive_data(db_connection):
     for data_name, data_pipline in data_types.items():
         json_data = data_pipline["Reader"](data_pipline["url"]).get_data()
         data = data_pipline["Parser"](json_data)
-        data_pipline["Handler"](data_name, db_connection, data)
+        data_pipline["Handler"](data_name, db_connection, data, cache)
         db_connection.commit()
 
 
+
+def ingest_team_roster(db_connection, cache):
+    json_data = data_types["Players"]["Reader"](data_types["Players"]["url"]).get_data()
+    data = TeamRosters(json_data)
+    TeamRostersHandler("TeamRosters", db_connection, data, cache)
+    db_connection.commit()
+
 def ingest_games_data(db_connection):
+
     final_games = [t[0] for t in get_final_games_ids(db_connection.cursor())]
+
     for game in final_games:
         print(game)
         data = GameLineUpReader(game).get_data()
@@ -59,8 +68,15 @@ def ingest_games_data(db_connection):
 
 
 try:
-    ingest_naive_data(sql_con)
-    ingest_games_data(sql_con)
+    #Todo: only if needed
+    cache= None
+    try:
+        cache = NBAFeedFromDB(sql_con)
+    except OSError as ex :
+        print("Cought exception when trying to load cache from DB. Not going to use cache")
+    ingest_team_roster(sql_con, cache)
+    # ingest_naive_data(sql_con, cache)
+    # ingest_games_data(cache, sql_con)
 except Exception as e:
     print("Caught exception during data ingestion {}".format(e))
 finally:

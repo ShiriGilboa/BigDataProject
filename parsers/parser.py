@@ -16,6 +16,9 @@ class Parser:
     def __getitem__(self, index):
         return self.data[index]
 
+    def __setitem__(self, element):
+        return self.data.append(element)
+
     @abstractmethod
     def parse(self, data):
         pass
