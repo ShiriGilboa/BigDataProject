@@ -1,10 +1,7 @@
 import os
 import sqlite3 as sql
 
-DB_FILE_NAME = "NBA_DB_2.db"
-
-
-def get_sql_con(db_from_scratch=False, db_name=DB_FILE_NAME):
+def get_sql_con(db_name, db_from_scratch=False):
     if db_from_scratch or not os.path.exists(db_name):
         if os.path.exists(db_name):
             print("DB with path {} already exists, Going to remove it first".format(db_name))
