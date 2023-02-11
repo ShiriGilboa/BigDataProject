@@ -1,6 +1,23 @@
 import sqlite3
 
 
+# Extract the sets as {key} = {value}
+def get_sets(element):
+    slash = '\''
+    updates = []
+
+    keys = [f"{prop}" for prop in vars(element).keys() if not prop.startswith("__")]
+
+    values = [str(value) if not isinstance(value, str) else f"'{value.replace(slash, '')}'" for value in
+              vars(element).values()]
+
+    for k, v in zip(keys, values):
+        updates.append(f" {k} = {v} ")
+
+    update_string = (",".join(updates)).replace('None', '\'\'')
+    return update_string
+
+
 def get_columns_from_prop(element):
     # Get the properties of the class
     properties = vars(element)
@@ -113,5 +130,20 @@ class BaseHandler:
                 finally:
                     self.db.commit()
 
+    def where_condition(self):
+        raise NotImplementedError
     def update_data(self):
-        print("Going to update the following data {}".format(self.need_update))
+        if len(self.need_update) > 0:
+            total_num = len(self.need_update)
+            # Connect to the db.
+            with sqlite3.connect(self.db) as conn:
+                queries = ''
+                for element in self.need_update:
+                    try:
+                        # Execute and commit the command
+                        conn.execute(f'''UPDATE {self.name} SET {get_sets(element)}
+                                        WHERE {self.where_condition(element)}''')
+
+                        conn.commit()
+                    except Exception as e:
+                        print(f'Error: {e}')

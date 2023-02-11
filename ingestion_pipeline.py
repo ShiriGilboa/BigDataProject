@@ -1,15 +1,15 @@
-from handlers.TeamsRostersHandler import TeamRostersHandler
-from parsers.TeamRosters import TeamRosters
+from handlers.teams_rosters_handler import TeamRostersHandler
+from parsers.team_roster import TeamRosters
 from db_cache_manager import NBAFeedFromDB
-from handlers import Games, Teams, Players
-import handlers.Teams
-import parsers.Games
-import parsers.Players
-import parsers.Team
-from handlers.GameScoresHandler import TeamsGameScores, PlayersGameScores
-from handlers.GamesLineUp import GamesLineUpHandler
-from parsers.GameBoxScore import GameBoxScoresTeams, GameBoxScoresPlayers
-from parsers.GamesLinesUp import GamesLineUp
+from handlers import games, teams, players
+import handlers.teams
+import parsers.game_parser
+import parsers.players_parser
+import parsers.team_parser
+from handlers.game_score_handler import TeamsGameScores, PlayersGameScores
+from handlers.games_line_up import GamesLineUpHandler
+from parsers.game_box_score import GameBoxScoresTeams, GameBoxScoresPlayers
+from parsers.games_lines_up import GamesLineUp
 from readers import data_reader
 from readers.data_reader import GameLineUpReader, GameBoxScoreReader
 
@@ -44,6 +44,7 @@ class IngestionPipeLineManager:
             self.load_cache()
         else:
             self.cache.update_cache()
+        self.db_connection.close()
 
     def load_cache(self):
         try:
@@ -79,7 +80,7 @@ class IngestionPipeLineManager:
         # Get the most updated final games from the DB
         updated_final_games = [t[0] for t in NBAFeedFromDB.get_final_games_ids(self.db_connection)]
         cached_final_games = [game.ID for game in
-                              filter(lambda x: x.LiveStatus == "Final", self.cache.games)] if self.cache else []
+                              filter(lambda x: x.LiveStatus == "Final", self.cache.games)] if self.cache and self.cache.games else []
         new_finals = list(set(updated_final_games) - set(cached_final_games))
         # Here, we are going to iterate only on new final games. not all if them.
         for game in new_finals:

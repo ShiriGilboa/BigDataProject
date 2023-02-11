@@ -22,3 +22,6 @@ class PlayersHandler(BaseHandler):
         self.create_table(table_spec)
         self.insert_elements()
         self.update_data()
+
+    def where_condition(self, element):
+        return "ID = {}".format(element.ID)

@@ -31,6 +31,8 @@ class TeamsGameScores(BaseHandler):
         self.create_table(table_spec)
         self.insert_elements()
         self.update_data()
+    def where_condition(self, element):
+        return " GameID = {} AND TeamID = {} ".format(element.GameID, element.TeamID)
 class PlayersGameScores(BaseHandler):
     def __init__(self, name, db, data, cache=None):
         super().__init__(name, db, data)
@@ -59,3 +61,5 @@ class PlayersGameScores(BaseHandler):
         self.create_table(table_spec)
         self.insert_elements()
         self.update_data()
+    def where_condition(self, element):
+        return " GameID = {} AND PlayerID = {} ".format(element.GameID, element.PlayerID)
