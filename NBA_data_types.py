@@ -22,7 +22,8 @@ class GameScore:
         self.BLK = BLK
         self.TournOvers = TournOvers
         self.PTS = PTS
-    def __eq__(self, other): 
+
+    def __eq__(self, other):
         if not isinstance(other, GameScore):
             # don't attempt to compare against unrelated types
             return NotImplemented
@@ -70,6 +71,7 @@ class Game:
         self.HomeTeamID = HomeTeamID
         self.VisitorTeamID = VisitorTeamID
         self.LiveStatus = LiveStatus
+
     def __eq__(self, other):
         if not isinstance(other, Game):
             # don't attempt to compare against unrelated types
@@ -109,6 +111,7 @@ class Player:
         self.Weight = Weight
         self.YearsInLeague = YearsInLeague
         self.Country = Country
+
     def __eq__(self, other):
         if not isinstance(other, Player):
             # don't attempt to compare against unrelated types
@@ -126,6 +129,7 @@ class Team:
         self.TeamName = name
         self.TeamCode = code
         self.City = city
+
     def __eq__(self, other):
         if not isinstance(other, Team):
             # don't attempt to compare against unrelated types
@@ -136,12 +140,12 @@ class Team:
         return f'{self.ID} {self.TeamName} {self.TeamCode} {self.City}'
 
 
-
 @dataclass
 class TeamRoster:
     def __init__(self, TeamID, PlayerID):
         self.TeamID = TeamID
         self.PlayerID = PlayerID
+
     def __eq__(self, other):
         if not isinstance(other, TeamRoster):
             # don't attempt to compare against unrelated types
@@ -150,4 +154,3 @@ class TeamRoster:
 
     def __str__(self):
         return f'{self.TeamID} {self.PlayerID}'
-

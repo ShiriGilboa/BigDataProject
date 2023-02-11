@@ -1,4 +1,4 @@
-from handlers.BaseHandler import BaseHandler
+from handlers.base_handler import BaseHandler
 
 
 class GamesLineUpHandler(BaseHandler):

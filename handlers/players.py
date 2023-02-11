@@ -1,6 +1,6 @@
 import sqlite3
 
-from handlers.BaseHandler import BaseHandler
+from handlers.base_handler import BaseHandler
 
 
 class PlayersHandler(BaseHandler):

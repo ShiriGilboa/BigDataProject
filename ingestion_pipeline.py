@@ -23,12 +23,12 @@ class IngestionPipeLineManager:
     # Parser and Handler.
     data_types = {
         "Games": {"Reader": data_reader.BaseReader, "url": "league/00_full_schedule.json",
-                  "Parser": parsers.Games.Games,
-                  "Handler": handlers.Games.GamesHandler},
+                  "Parser": parsers.game_parser.Games,
+                  "Handler": handlers.games.GamesHandler},
         "Players": {"Reader": data_reader.BaseReader, "url": "players/00_player_info.json",
-                    "Parser": parsers.Players.Players, "Handler": handlers.Players.PlayersHandler},
-        "Teams": {"Reader": data_reader.BaseReader, "url": "teams/00_team_info.json", "Parser": parsers.Team.Teams,
-                  "Handler": handlers.Teams.TeamsHandler},
+                    "Parser": parsers.players_parser, "Handler": handlers.players.PlayersHandler},
+        "Teams": {"Reader": data_reader.BaseReader, "url": "teams/00_team_info.json", "Parser": parsers.team_parser.Teams,
+                  "Handler": handlers.teams.TeamsHandler},
     }
 
     def __init__(self, db_connection):
