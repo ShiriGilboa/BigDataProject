@@ -1,6 +1,6 @@
 from handlers.TeamsRostersHandler import TeamRostersHandler
 from parsers.TeamRosters import TeamRosters
-from NBA_DB_manager import NBAFeedFromDB
+from db_cache_manager import NBAFeedFromDB
 from handlers import Games, Teams, Players
 import handlers.Teams
 import parsers.Games
@@ -35,6 +35,7 @@ class IngestionPipeLineManager:
         self.db_connection = db_connection
         self.cache = None
         self.load_cache()
+
     def run(self):
         self.ingest_naive_data()
         self.ingest_team_roster()
@@ -43,13 +44,15 @@ class IngestionPipeLineManager:
             self.load_cache()
         else:
             self.cache.update_cache()
+
     def load_cache(self):
         try:
             self.cache = NBAFeedFromDB(self.db_connection)
         except OSError as ex:
             print("Caught exception when trying to load cache from DB. Not going to use cache {}".format(ex))
+            self.cache = None
 
-    def ingest_naive_data(self, db_connection, cache=None):
+    def ingest_naive_data(self):
         '''
         This method will handle the ETL pipline for the naive data types (Games, Players, Teams) means, data type that
         doesn't require pre-processing manipulation
@@ -59,8 +62,8 @@ class IngestionPipeLineManager:
         for data_name, data_pipline in self.data_types.items():
             json_data = data_pipline["Reader"](data_pipline["url"]).get_data()
             data = data_pipline["Parser"](json_data)
-            data_pipline["Handler"](data_name, db_connection, data, cache)
-            db_connection.commit()
+            data_pipline["Handler"](data_name, self.db_connection, data, self.cache)
+            self.db_connection.commit()
 
     def ingest_team_roster(self):
         try:
@@ -72,11 +75,11 @@ class IngestionPipeLineManager:
         finally:
             self.db_connection.commit()
 
-
     def ingest_games_data(self):
         # Get the most updated final games from the DB
         updated_final_games = [t[0] for t in NBAFeedFromDB.get_final_games_ids(self.db_connection)]
-        cached_final_games = [game.ID for game in filter(lambda x: x.LiveStatus == "Final", self.cache.games)] if self.cache else []
+        cached_final_games = [game.ID for game in
+                              filter(lambda x: x.LiveStatus == "Final", self.cache.games)] if self.cache else []
         new_finals = list(set(updated_final_games) - set(cached_final_games))
         # Here, we are going to iterate only on new final games. not all if them.
         for game in new_finals:

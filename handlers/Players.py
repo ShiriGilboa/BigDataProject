@@ -5,7 +5,7 @@ from handlers.BaseHandler import BaseHandler
 
 class PlayersHandler(BaseHandler):
     def __init__(self, name, db, data, cache=None):
-        self.key_vals = ["ID", "YearsInLeague", "Country" ]
+        self.key_attr = ["ID", "YearsInLeague", "Country" ]
         super().__init__(name, db, data, cache)
         table_spec = '''CREATE TABLE IF NOT EXISTS {} (
                         ID BingInt , 

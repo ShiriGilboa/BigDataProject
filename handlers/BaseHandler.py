@@ -35,8 +35,7 @@ class BaseHandler:
         self.conflicts = ""
         self.new_data = []
         self.need_update = []
-        if cache:
-            self.split_data(cache)
+        self.split_data(cache)
 
     def split_data(self, cache):
         '''
@@ -51,7 +50,7 @@ class BaseHandler:
                 if element in cache.__getattribute__(self.name.lower()):
                     continue
                 # this data is not exists / changed
-                elif self.key_attr:
+                elif hasattr(self, "key_attr") and self.key_attr:
                     checked_keys = False
                     for cache_elem in cache.__getattribute__(self.name.lower()):
                         # checking if this item is exists in cache according to keys(assuming keys wont change)

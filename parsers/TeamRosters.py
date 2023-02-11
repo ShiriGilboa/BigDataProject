@@ -22,6 +22,5 @@ class TeamRosters(Parser):
             player_id = player['pid']
             team_roster_list.append(TeamRoster(team_id, player_id))
 
-        for roster in team_roster_list:
-            print(roster)
+        print("Parsed {} rosters".format(len(team_roster_list)))
         self.data = team_roster_list
