@@ -1,10 +1,14 @@
+import sys
+import papermill as pm
+
 from ingestion_pipeline import IngestionPipeLineManager
 from sql_db_manager import get_sql_con
-
+sys.path.append("./data_analysis")
 DEFAULT_DB_NAME = "NBA_DATA_BIG_DATA_PROJECT.db"
+ANALYSIS_JUPYTER_NOTEBOOK = "Big_data_Final_project_analysis.ipynb"
 db_connection = None
 pipeline_manager = None
-
+print(sys.path)
 def is_valid_choice(operation: str):
     return operation.isdigit() and int(operation) in range(len(operations))
 
@@ -27,17 +31,24 @@ def create_new_db():
 
 def build_update_db():
     global db_connection
-    if not db_connection:
-        db_connection = get_sql_con(DEFAULT_DB_NAME)
+    db_connection = get_sql_con(DEFAULT_DB_NAME)
     global pipeline_manager
     if not pipeline_manager:
         pipeline_manager = IngestionPipeLineManager(db_connection)
+    else:
+        pipeline_manager.update_db_connection(db_connection)
     pipeline_manager.run()
 
+def run_jupyter_notebook():
+    pm.execute_notebook(ANALYSIS_JUPYTER_NOTEBOOK, "results_{}".format(ANALYSIS_JUPYTER_NOTEBOOK))
+def terminate_program():
+    print("That's it for now, thank you !")
+    exit(1)
 
 operations = {"Create New DB from scratch": create_new_db,
               "Update Your DB from NBA feed": build_update_db,
-              "Run Data analysis": create_new_db}
+              "Run Data analysis": run_jupyter_notebook,
+              "terminate": terminate_program}
 
 print("Welcome to live NBA Feed!")
 while True:

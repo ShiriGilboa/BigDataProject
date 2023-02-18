@@ -26,7 +26,7 @@ class IngestionPipeLineManager:
                   "Parser": parsers.game_parser.Games,
                   "Handler": handlers.games.GamesHandler},
         "Players": {"Reader": data_reader.BaseReader, "url": "players/00_player_info.json",
-                    "Parser": parsers.players_parser, "Handler": handlers.players.PlayersHandler},
+                    "Parser": parsers.players_parser.Players, "Handler": handlers.players.PlayersHandler},
         "Teams": {"Reader": data_reader.BaseReader, "url": "teams/00_team_info.json", "Parser": parsers.team_parser.Teams,
                   "Handler": handlers.teams.TeamsHandler},
     }
@@ -35,6 +35,8 @@ class IngestionPipeLineManager:
         self.db_connection = db_connection
         self.cache = None
         self.load_cache()
+    def update_db_connection(self, new_db_connection):
+        self.db_connection = new_db_connection
 
     def run(self):
         self.ingest_naive_data()
@@ -43,7 +45,7 @@ class IngestionPipeLineManager:
         if not self.cache:
             self.load_cache()
         else:
-            self.cache.update_cache()
+            self.cache.update_cache(self.db_connection)
         self.db_connection.close()
 
     def load_cache(self):
