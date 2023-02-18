@@ -11,7 +11,7 @@ class NBAFeedFromDB:
 
     def update_cache(self, db):
         '''
-        Load data from DB to local vairables.
+        Load data from DB to local vairables in order it use as cache when inserting new Data.
         '''
         try:
             self.players = self.get_players(db)
@@ -40,7 +40,7 @@ class NBAFeedFromDB:
             players.append(player)
         return players
 
-    def get_teams(self, db):
+    def get_teams(self, db: sqlite3):
         teams = []
         try:
             cursor = db.execute(f'''select * from Teams''')

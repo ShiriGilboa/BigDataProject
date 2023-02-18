@@ -56,14 +56,16 @@ class BaseHandler:
 
     def split_data(self, cache):
         '''
+        @type: cache NBAFeedFromDB object
+
         Here, using our cache (if exists) we are going to split the data into 2 groups. the need to be updated data and
         new data.
         This method going to set 2 members : new_data, need_update_data
         '''
-        #Cheching that cache exists, and that desired data and we relevant cache there.
+        # Cheching that cache exists, and that desired data and we relevant cache there.
         if cache and hasattr(cache, self.name.lower()) and cache.__getattribute__(self.name.lower()) is not None:
             for element in self.data:
-                #exists completely no need to update it
+                # exists completely no need to update it
                 if element in cache.__getattribute__(self.name.lower()):
                     continue
                 # this data is not exists / changed
@@ -71,7 +73,8 @@ class BaseHandler:
                     checked_keys = False
                     for cache_elem in cache.__getattribute__(self.name.lower()):
                         # checking if this item is exists in cache according to keys(assuming keys wont change)
-                        checked_keys = all([element.__getattribute__(key)==cache_elem.__getattribute__(key) for key in self.key_attr])
+                        checked_keys = all([element.__getattribute__(key) == cache_elem.__getattribute__(key) for key in
+                                            self.key_attr])
                         if checked_keys:
                             self.need_update.append(element)
                 else:
@@ -80,8 +83,11 @@ class BaseHandler:
         else:
             self.new_data = self.data
 
-
     def create_table(self, table_spec):
+        """
+
+        @type table_spec: SQL string with table creation CMD
+        """
         print("Trying to create table with name {}".format(self.name))
         try:
             self.db.execute("{}".format(table_spec))
@@ -131,10 +137,14 @@ class BaseHandler:
                     self.db.commit()
 
     def where_condition(self):
+        '''
+        Each handler should implement its own where condition (usually based on keys)
+        @return:
+        '''
         raise NotImplementedError
+
     def update_data(self):
         if len(self.need_update) > 0:
-            total_num = len(self.need_update)
             # Connect to the db.
             with sqlite3.connect(self.db) as conn:
                 queries = ''

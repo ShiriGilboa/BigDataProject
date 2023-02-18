@@ -1,5 +1,3 @@
-import sqlite3
-
 from handlers.base_handler import BaseHandler, get_columns_from_prop, get_values_from_element
 
 
