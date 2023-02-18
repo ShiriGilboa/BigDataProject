@@ -1,1 +1,36 @@
-./Dashboard/venv/
+Dashboard/venv/
+__pycache__/NBA_data_types.cpython-39.pyc
+__pycache__/NBA_DB_manager.cpython-39.pyc
+__pycache__/sql_db_manager.cpython-39.pyc
+Dashboard/.DS_Store
+Dashboard/game_player_score_grouped_sorted_playerScore/_SUCCESS
+Dashboard/game_player_score_grouped_sorted_playerScore/._SUCCESS.crc
+Dashboard/game_player_score_grouped_sorted_playerScore/.part-00000-61d7dedb-5fbb-4ca8-ad56-c5f31f9c39cb-c000.csv.crc
+Dashboard/game_player_score_grouped_sorted_playerScore/part-00000-61d7dedb-5fbb-4ca8-ad56-c5f31f9c39cb-c000.csv
+Dashboard/game_team_score_grouped_sorted_teamScore/_SUCCESS
+Dashboard/game_team_score_grouped_sorted_teamScore/._SUCCESS.crc
+Dashboard/game_team_score_grouped_sorted_teamScore/.part-00000-6ec1faa5-3660-4f9f-9433-7eb218705a62-c000.csv.crc
+Dashboard/game_team_score_grouped_sorted_teamScore/part-00000-6ec1faa5-3660-4f9f-9433-7eb218705a62-c000.csv
+Dashboard/last_games/_SUCCESS
+Dashboard/last_games/._SUCCESS.crc
+Dashboard/last_games/.part-00000-7bdcab5b-28c1-479c-8542-863cf3b04043-c000.csv.crc
+Dashboard/last_games/part-00000-7bdcab5b-28c1-479c-8542-863cf3b04043-c000.csv
+Data analysis/.DS_Store
+Data analysis/prediction_dataset/_SUCCESS
+Data analysis/prediction_dataset/._SUCCESS.crc
+Data analysis/prediction_dataset/.part-00000-8276bfdb-ed75-4859-a72b-7fed52a29b45-c000.csv.crc
+Data analysis/prediction_dataset/part-00000-8276bfdb-ed75-4859-a72b-7fed52a29b45-c000.csv
+handlers/__pycache__/BaseHandler.cpython-39.pyc
+handlers/__pycache__/Games.cpython-39.pyc
+handlers/__pycache__/GameScoresHandler.cpython-39.pyc
+handlers/__pycache__/GamesLineUp.cpython-39.pyc
+handlers/__pycache__/Players.cpython-39.pyc
+handlers/__pycache__/Teams.cpython-39.pyc
+parsers/__pycache__/__init__.cpython-39.pyc
+parsers/__pycache__/GameBoxScore.cpython-39.pyc
+parsers/__pycache__/Games.cpython-39.pyc
+parsers/__pycache__/GamesLinesUp.cpython-39.pyc
+parsers/__pycache__/parser.cpython-39.pyc
+parsers/__pycache__/Players.cpython-39.pyc
+parsers/__pycache__/Team.cpython-39.pyc
+readers/__pycache__/data_reader.cpython-39.pyc
