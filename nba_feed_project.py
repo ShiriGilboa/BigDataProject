@@ -40,15 +40,17 @@ def build_update_db():
     else:
         pipeline_manager.update_db_connection(db_connection)
     pipeline_manager.run()
+    print("Congratulations!! DB is up-to-date with latest data from NBA feed!")
 
 
 def run_jupyter_notebook():
     print("Going to run Jupyer notebook {}".format(os.path.join(analysis_path, ANALYSIS_JUPYTER_NOTEBOOK)))
-    print("Output notebook will be in {}".format(os.path.join(analysis_path, "results_{}".format(ANALYSIS_JUPYTER_NOTEBOOK))))
     print("It might take a while to run all analysis..")
     pm.execute_notebook(input_path=os.path.join(analysis_path, ANALYSIS_JUPYTER_NOTEBOOK),
                         output_path=os.path.join(analysis_path, "results_{}".format(ANALYSIS_JUPYTER_NOTEBOOK)),
                         cwd=os.path.join(os.getcwd(), analysis_path), stdout_file=sys.stdout)
+    print("Output notebook is ready and saved in {}".format(
+        os.path.join(analysis_path, "results_{}".format(ANALYSIS_JUPYTER_NOTEBOOK))))
 
 
 def terminate_program():

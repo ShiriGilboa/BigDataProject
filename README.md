@@ -35,6 +35,7 @@ To run the project, open your terminal and navigate to the directory where the p
     1. Select one of following optsions:
 ![img_1.png](img/img_1.png)
 ![img_2.png](img/img_2.png)
+![db_insertion.png](img/db_insertion.png)
 
 1) **first option** - will create a new empty DB, called **"NBA_DATA_BIG_DATA_PROJECT.db"**, delete if exists.
 2) **second option** - fetch the data from official NBA feed, insert/update new entries in the DB.
